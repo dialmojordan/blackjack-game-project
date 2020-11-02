@@ -1,0 +1,57 @@
+body{
+  margin: 0px;
+  padding: 0px
+}
+
+.container > div{
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#computer{
+  background-color: rgba(255,0,0,0.2);
+  /* visibility: hidden; */
+}
+#user{
+  background-color: rgba(0,255,0,0.2);
+}
+#user div{
+  display: flex;
+  flex-direction: column;
+}
+img{
+    height: 40vh;
+    margin: 5vh;
+}
+button{
+  width:100px;
+  border: none;
+  padding: 10px 20px;
+}
+
+.hit{
+  background-color: red;
+}
+.skip{
+  background-color: green;
+}
+.check{
+  background-color: black;
+  color: white
+}
+
+.score{
+  position: absolute;
+  width:100px;
+  margin: 0 auto;
+  top: 0px
+}
+
+.result{
+  position: absolute;
+  width:100px;
+  margin: 0 auto;
+  bottom: 0px
+}
