@@ -52,42 +52,97 @@ let cards = [
   { name: "KH", img: "KH.jpg", value: 10 },
 ];
 
-// const game= null;
+let game = null;
 
-let staticCards = [];
-let dealerCards = [];
-let playerCards = [];
-let playerScore = 0;
-let dealerScore = 0;
-let roundLost = false;
-let roundWon = false;
-let roundTied = false;
+// let staticCards = [];
+// let dealerCards = [];
+// let playerCards = [];
+// let playerScore = 0;
+// let dealerScore = 0;
+// let roundLost = false;
+// let roundWon = false;
+// let roundTied = false;
 
-//create player //test name
-let John = new Player("John");
-let AI = new Computer();
-
-//start game
-let game = new Blackjack(cards);
 let userEl = document.querySelector("#user");
 let aiEl = document.querySelector("#computer");
+let betInput = document.querySelector("input");
+let bet = document.querySelector(".container p span span");
 
-//deak the hand
-game.shuffle(John);
-game.shuffle(AI);
-game.shuffle(John);
-game.shuffle(AI);
+//create player
+let John = new Player("John");
+userEl.querySelector(".balance").innerText = John.balance + " $";
 
-// console.log(John)
-// console.log(AI)
+let AI = new Computer();
+aiEl.querySelector(".balance").innerText = AI.balance + " $";
 
-//render the cards
+betInput.oninput = function () {
+  userEl.querySelector(".balance").innerText = John.balance - this.value + " $";
+  bet.innerText = this.value + " $";
+};
 
-function renderCard(cardSrc, el, score) {
+function startGame() {
+  betInput.style.display = "inline";
+  bet.parentNode.style.display = "inline";
+  //clear previous results
+  John.hand = [];
+  AI.hand = [];
+  John.score = 0;
+  AI.score = 0;
+  betInput.value = 0;
+  bet.innerText = "";
+  clearDashboard([userEl, aiEl]);
+  document.querySelector(".buttons").style.display = "flex";
+  //start game
+  game = new Blackjack(cards);
+
+  //deak the hand
+  game.shuffle(John);
+  game.shuffle(AI);
+  game.shuffle(John);
+  game.shuffle(AI);
+
+  console.log(John);
+  console.log(AI);
+
+  //render the cards
+  John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
+  userEl.querySelector(".balance").innerText =
+    John.balance - betInput.value + " $";
+  AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score, true));
+  aiEl.querySelector(".balance").innerText = AI.balance + " $";
+}
+
+document.querySelector(".new_game").onclick = function () {
+  startGame();
+};
+
+function renderCard(cardSrc, el, score, opponent = false) {
   let card = document.createElement("img");
-  card.src = `images/${cardSrc}`;
+  if (opponent) {
+    card.src = `images/Gray_back.jpg`;
+    el.querySelector("div.score").innerText = `Score: ??`;
+  } else {
+    card.src = `images/${cardSrc}`;
+    el.querySelector("div.score").innerText = `Score: ${score}`;
+  }
   el.appendChild(card);
-  el.querySelector("div.score").innerText = `Score: ${score}`;
+}
+
+function clearDashboard(arr) {
+  arr.forEach((player) => {
+    let imgs = player.querySelectorAll("img");
+    imgs.forEach((img) => {
+      player.removeChild(img);
+    });
+    player.querySelector(".result").innerText = "";
+  });
+}
+
+//hit me (dom)
+
+function hitMe(player, el, opponent) {
+  let card = game.shuffle(player);
+  renderCard(card.img, el, player.score, opponent);
   findWinner([
     {
       el: userEl,
@@ -100,30 +155,25 @@ function renderCard(cardSrc, el, score) {
   ]);
 }
 
-John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
-
-AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
-
-//hit me (dom)
-
-function hitMe(player, el) {
-  renderCard(game.shuffle(player).img, el, player.score);
-}
 document
   .querySelector("#user button.hit")
   .addEventListener("click", function () {
     hitMe(John, userEl);
-    if (AI.score <= 17) {
-      hitMe(AI, aiEl);
+    // let random = Math.round(Math.random())
+    if (AI.score < 17) {
+      hitMe(AI, aiEl, true);
     }
   });
 document
   .querySelector("#user button.skip")
   .addEventListener("click", function () {
-    while (AI.score <= 17) {
-      hitMe(AI, aiEl);
+    // let random = Math.round(Math.random())
+    while (AI.score < 17) {
+      // random = Math.round(Math.random())
+      hitMe(AI, aiEl, true);
     }
   });
+
 document
   .querySelector("#user button.check")
   .addEventListener("click", function () {
@@ -154,29 +204,40 @@ document
 
 //stay
 
-//winner?
+//winner? the some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
 
 function findWinner(arr, check = false) {
   if (arr.some((player) => player.obj.score > 21)) {
+    clearDashboard([userEl, aiEl]);
+    John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
+    AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
     arr.forEach((player) => {
       let result = player.el.querySelector("div.result");
       if (player.obj.score > 21) {
         result.innerText = `Looser`;
         result.style.color = "red";
+        player.obj.balance -= +betInput.value;
       } else {
         result.innerText = `Winner`;
         result.style.color = "green";
+        player.obj.wins += 1;
+        player.obj.balance += +betInput.value;
       }
       player.el.style.visibility = "visible";
     });
   }
   if (check) {
+    clearDashboard([userEl, aiEl]);
+    John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
+    AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
     let winner = null;
     let difference = 100;
     arr.forEach((player, index) => {
       if (21 - player.obj.score < difference) {
         difference = 21 - player.obj.score;
         winner = index;
+      } else if (21 - player.obj.score == difference) {
+        winner = 1;
       }
     });
 
@@ -187,9 +248,12 @@ function findWinner(arr, check = false) {
       if (index !== winner) {
         result.innerText = `Looser`;
         result.style.color = "red";
+        player.obj.balance -= +betInput.value;
       } else {
         result.innerText = `Winner`;
         result.style.color = "green";
+        player.obj.wins += 1;
+        player.obj.balance += +betInput.value;
       }
       player.el.style.visibility = "visible";
     });

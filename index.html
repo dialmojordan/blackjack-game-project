@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>SOLITAIRE</title>
-</head>
-<body>
-    <div class='container'>
-        <div id='computer'>
-            <div class='score'> score 21</div>
-            <div class='result'></div>
-            <!-- <button>hit me</button> -->
+  </head>
+  <body>
+    <div class="container">
+      <div id="computer">
+        <div class="player">CPU</div>
+        <div class="score"></div>
+        <div class="result"></div>
+        <div class="balance"></div>
+        <!-- <button>hit me</button> -->
+      </div>
+      <p>
+        <button class="new_game">start new game</button>
+        <input type="number" placeholder="your bet" style="display: none" />
+        <span style="display: none">BET: <span></span></span>
+      </p>
+      <div id="user">
+        <div class="player">YOU</div>
+        <div class="score"></div>
+        <div class="result"></div>
+        <div class="balance"></div>
+        <div class="buttons">
+          <button class="hit">hit me</button>
+          <button class="skip">skip</button>
+          <button class="check">check</button>
         </div>
-        <div id='user'>
-            <div class='score'>score 23</div>
-            <div class='result'></div>
-            <div>
-                <button class='hit'>hit me</button>
-                <button class='skip'>skip</button>
-                <button class='check'>check</button>
-            </div>
-            
-        </div>
+      </div>
     </div>
-    
-    
 
     <script src="./src/player.js"></script>
-    <script src="./src/blackjack.js"></script>  
-    <script src="./src/ai.js"></script> 
+    <script src="./src/blackjack.js"></script>
+    <script src="./src/ai.js"></script>
     <script src="./src/main.js"></script>
-    
-    
-     
-</body>
+  </body>
 </html>
