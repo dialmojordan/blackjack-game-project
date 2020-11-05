@@ -54,21 +54,13 @@ let cards = [
 
 let game = null;
 
-// let staticCards = [];
-// let dealerCards = [];
-// let playerCards = [];
-// let playerScore = 0;
-// let dealerScore = 0;
-// let roundLost = false;
-// let roundWon = false;
-// let roundTied = false;
-
+//
 let userEl = document.querySelector("#user");
 let aiEl = document.querySelector("#computer");
 let betInput = document.querySelector("input");
 let bet = document.querySelector(".container p span span");
 
-//create player
+//initialize the players
 let John = new Player("John");
 userEl.querySelector(".balance").innerText = John.balance + " $";
 
@@ -117,7 +109,7 @@ document.querySelector(".new_game").onclick = function () {
   startGame();
 };
 
-// show back cards
+// render cards - show back cards
 function renderCard(cardSrc, el, score, shouldShowBackCard = false) {
   let card = document.createElement("img");
   if (shouldShowBackCard) {
@@ -141,28 +133,18 @@ function clearDashboard(arr) {
   });
 }
 
-//hit me - skip - check btns
-
+//hit me - skip - stand btns
+// give cards
 function hitMe(player, el, shouldShowBackCards) {
   let card = game.shuffle(player);
   renderCard(card.img, el, player.score, shouldShowBackCards);
-  findWinner([
-    {
-      el: userEl,
-      obj: John,
-    },
-    {
-      el: aiEl,
-      obj: AI,
-    },
-  ]);
 }
 
 document
   .querySelector("#user button.hit")
   .addEventListener("click", function () {
     hitMe(John, userEl);
-    // let random = Math.round(Math.random())
+
     if (AI.score < 17) {
       hitMe(AI, aiEl, true);
     }
@@ -170,9 +152,7 @@ document
 document
   .querySelector("#user button.skip")
   .addEventListener("click", function () {
-    // let random = Math.round(Math.random())
     while (AI.score < 17) {
-      // random = Math.round(Math.random())
       hitMe(AI, aiEl, true);
     }
   });
@@ -180,77 +160,53 @@ document
 document
   .querySelector("#user button.stand")
   .addEventListener("click", function () {
-    findWinner(
-      [
-        {
-          el: userEl,
-          obj: John,
-        },
-        {
-          el: aiEl,
-          obj: AI,
-        },
-      ],
-      true
-    );
+    findWinner([
+      {
+        el: userEl,
+        obj: John,
+      },
+      {
+        el: aiEl,
+        obj: AI,
+      },
+    ]);
   });
 
 //find the winner
 
-function findWinner(arr, stand = false) {
-  if (arr.some((player) => player.obj.score > 21)) {
-    clearDashboard([userEl, aiEl]);
-    John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
-    AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
-    arr.forEach((player) => {
-      let result = player.el.querySelector("div.result");
-      if (player.obj.score > 21) {
-        result.innerText = `[LOSER!]`;
-        result.style.color = "red";
-        result.style.opacity = 0.8;
-        player.obj.balance -= +betInput.value;
-      } else {
-        result.innerText = `[WINNER!]`;
-        result.style.color = "yellow";
-        result.style.opacity = 0.8;
-        player.obj.wins += 1;
-        player.obj.balance += +betInput.value;
-      }
-      //player.el.style.visibility = "visible";
-    });
-  }
-  if (stand) {
-    clearDashboard([userEl, aiEl]);
-    John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
-    AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
-    let winner = null;
-    let difference = 100;
-    arr.forEach((player, index) => {
-      if (21 - player.obj.score < difference) {
-        difference = 21 - player.obj.score;
-        winner = index;
-      } else if (21 - player.obj.score == difference) {
-        winner = 1;
-      }
-    });
+function findWinner(arr) {
+  clearDashboard([userEl, aiEl]);
+  John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
+  AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
+  let winner = null;
+  let difference = 100;
+  //check the closest to 21
+  arr.forEach((player, index) => {
+    let minus = 21 - player.obj.score;
+    if (minus < difference && minus >= 0) {
+      difference = minus;
+      winner = index;
+    } else if (minus == difference) {
+      winner = 1;
+    }
+  });
 
-    console.log(winner, difference);
-
-    arr.forEach((player, index) => {
-      let result = player.el.querySelector("div.result");
-      if (index !== winner) {
-        result.innerText = `[LOSER!]`;
-        result.style.color = "red";
-        result.style.opacity = 0.8;
-        player.obj.balance -= +betInput.value;
-      } else {
-        result.innerText = `[WINNER!]`;
-        result.style.color = "yellow";
-        player.obj.wins += 1;
-        result.style.opacity = 0.8;
-        player.obj.balance += +betInput.value;
-      }
-      //player.el.style.visibility = "visible";
-    });
-  }
+  //declare the winner
+  arr.forEach((player, index) => {
+    let result = player.el.querySelector("div.result");
+    if (index !== winner) {
+      result.innerText = `[LOSER!]`;
+      result.style.color = "red";
+      result.style.opacity = 0.8;
+      player.obj.balance -= +betInput.value;
+    } else {
+      result.innerText = `[WINNER!]`;
+      result.style.color = "yellow";
+      player.obj.wins += 1;
+      result.style.opacity = 0.8;
+      player.obj.balance += +betInput.value;
+    }
+    player.el.querySelector(".balance").innerText = player.obj.balance + " $";
+    //player.el.style.visibility = "visible";
+  });
 }
