@@ -4,31 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>SOLITAIRE</title>
+    <title>Blackjack</title>
   </head>
   <body>
+    <div class="black_jack">Blackjack</div>
     <div class="container">
       <div id="computer">
-        <div class="player">CPU</div>
+        <div class="player">[CPU]</div>
         <div class="score"></div>
         <div class="result"></div>
         <div class="balance"></div>
         <!-- <button>hit me</button> -->
       </div>
+
       <p>
-        <button class="new_game">start new game</button>
+        <button class="new_game">NEW GAME</button>
         <input type="number" placeholder="your bet" style="display: none" />
         <span style="display: none">BET: <span></span></span>
       </p>
       <div id="user">
-        <div class="player">YOU</div>
+        <div class="player">[YOU]</div>
         <div class="score"></div>
         <div class="result"></div>
         <div class="balance"></div>
         <div class="buttons">
-          <button class="hit">hit me</button>
-          <button class="skip">skip</button>
-          <button class="check">check</button>
+          <button class="hit">HIT</button>
+          <button class="skip">SKIP</button>
+          <button class="stand">STAND</button>
         </div>
       </div>
     </div>

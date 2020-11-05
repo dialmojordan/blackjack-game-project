@@ -80,6 +80,7 @@ betInput.oninput = function () {
   bet.innerText = this.value + " $";
 };
 
+//start game - new game
 function startGame() {
   betInput.style.display = "inline";
   bet.parentNode.style.display = "inline";
@@ -95,7 +96,7 @@ function startGame() {
   //start game
   game = new Blackjack(cards);
 
-  //deak the hand
+  //deal the hand
   game.shuffle(John);
   game.shuffle(AI);
   game.shuffle(John);
@@ -104,7 +105,7 @@ function startGame() {
   console.log(John);
   console.log(AI);
 
-  //render the cards
+  //render cards
   John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
   userEl.querySelector(".balance").innerText =
     John.balance - betInput.value + " $";
@@ -116,9 +117,10 @@ document.querySelector(".new_game").onclick = function () {
   startGame();
 };
 
-function renderCard(cardSrc, el, score, opponent = false) {
+// show back cards
+function renderCard(cardSrc, el, score, shouldShowBackCard = false) {
   let card = document.createElement("img");
-  if (opponent) {
+  if (shouldShowBackCard) {
     card.src = `images/Gray_back.jpg`;
     el.querySelector("div.score").innerText = `Score: ??`;
   } else {
@@ -128,6 +130,7 @@ function renderCard(cardSrc, el, score, opponent = false) {
   el.appendChild(card);
 }
 
+// clear the dashboard
 function clearDashboard(arr) {
   arr.forEach((player) => {
     let imgs = player.querySelectorAll("img");
@@ -138,11 +141,11 @@ function clearDashboard(arr) {
   });
 }
 
-//hit me (dom)
+//hit me - skip - check btns
 
-function hitMe(player, el, opponent) {
+function hitMe(player, el, shouldShowBackCards) {
   let card = game.shuffle(player);
-  renderCard(card.img, el, player.score, opponent);
+  renderCard(card.img, el, player.score, shouldShowBackCards);
   findWinner([
     {
       el: userEl,
@@ -175,7 +178,7 @@ document
   });
 
 document
-  .querySelector("#user button.check")
+  .querySelector("#user button.stand")
   .addEventListener("click", function () {
     findWinner(
       [
@@ -192,21 +195,9 @@ document
     );
   });
 
-// document.querySelector('#user button').addEventListener('click',function(){
-//   alert('hi')
-// })
+//find the winner
 
-// document.querySelector('#computer button').onclick = function(){
-//
-// }
-
-//check
-
-//stay
-
-//winner? the some() method tests whether at least one element in the array passes the test implemented by the provided function. It returns a Boolean value.
-
-function findWinner(arr, check = false) {
+function findWinner(arr, stand = false) {
   if (arr.some((player) => player.obj.score > 21)) {
     clearDashboard([userEl, aiEl]);
     John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
@@ -214,19 +205,21 @@ function findWinner(arr, check = false) {
     arr.forEach((player) => {
       let result = player.el.querySelector("div.result");
       if (player.obj.score > 21) {
-        result.innerText = `Looser`;
+        result.innerText = `[LOSER!]`;
         result.style.color = "red";
+        result.style.opacity = 0.8;
         player.obj.balance -= +betInput.value;
       } else {
-        result.innerText = `Winner`;
-        result.style.color = "green";
+        result.innerText = `[WINNER!]`;
+        result.style.color = "yellow";
+        result.style.opacity = 0.8;
         player.obj.wins += 1;
         player.obj.balance += +betInput.value;
       }
-      player.el.style.visibility = "visible";
+      //player.el.style.visibility = "visible";
     });
   }
-  if (check) {
+  if (stand) {
     clearDashboard([userEl, aiEl]);
     John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
     AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
@@ -246,16 +239,18 @@ function findWinner(arr, check = false) {
     arr.forEach((player, index) => {
       let result = player.el.querySelector("div.result");
       if (index !== winner) {
-        result.innerText = `Looser`;
+        result.innerText = `[LOSER!]`;
         result.style.color = "red";
+        result.style.opacity = 0.8;
         player.obj.balance -= +betInput.value;
       } else {
-        result.innerText = `Winner`;
-        result.style.color = "green";
+        result.innerText = `[WINNER!]`;
+        result.style.color = "yellow";
         player.obj.wins += 1;
+        result.style.opacity = 0.8;
         player.obj.balance += +betInput.value;
       }
-      player.el.style.visibility = "visible";
+      //player.el.style.visibility = "visible";
     });
   }
 }
