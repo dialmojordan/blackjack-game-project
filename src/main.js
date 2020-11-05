@@ -179,14 +179,15 @@ function findWinner(arr) {
   John.hand.forEach((card) => renderCard(card.img, userEl, John.score));
   AI.hand.forEach((card) => renderCard(card.img, aiEl, AI.score));
   let winner = null;
-  let difference = 100;
+  let bestDifference = 100;
   //check the closest to 21
   arr.forEach((player, index) => {
-    let minus = 21 - player.obj.score;
-    if (minus < difference && minus >= 0) {
-      difference = minus;
+    let playerDifference = 21 - player.obj.score;
+    if (playerDifference < bestDifference && playerDifference >= 0) {
+      bestDifference = playerDifference;
       winner = index;
-    } else if (minus == difference) {
+    } else if (playerDifference == bestDifference) {
+      // dealer win
       winner = 1;
     }
   });
