@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Monsieur+La+Doulaise&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,700;1,700&display=swap");
+
 body {
   margin: 0px;
   padding: 0px;
@@ -7,10 +10,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100vh;
 }
 
 .container > div {
-  height: 45vh;
+  height: 30vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,35 +24,79 @@ p {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin: 0;
-  height: 10vh;
+  margin: 0 auto;
+  height: 40vh;
+  position: relative;
+  background-color: rgba(255, 51, 0, 0.5);
+  border-radius: 500px;
+  width: 70%;
+  border: 10px solid black;
+}
+
+p::after {
+  content: "";
+  background-image: url("images/back_cards-07.jpg");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
+.black_jack {
+  position: absolute;
+  top: 30vh;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  font-family: "Monsieur La Doulaise", cursive;
+  font-size: 100px;
+  border-top: 3.5px solid black;
 }
 #computer {
-  background-color: rgba(255, 0, 0, 0.2);
+  background-color: rgba(8, 116, 8, 0.9);
   /* visibility: hidden; */
 }
 #user {
-  background-color: rgba(0, 255, 0, 0.2);
+  background-color: rgba(8, 116, 8, 0.9);
+  border-top: 3.5px solid black;
 }
 
 img {
-  height: 35vh;
-  margin: 5vh;
+  height: 80%;
+  margin: 4%;
+  border: 2px solid black;
 }
 button {
   width: 100px;
-  border: none;
+  border: 1.8px solid yellow;
   padding: 10px 20px;
+  background-color: black;
+  color: white;
+}
+
+.new_game {
+  width: 100px;
+  border: 3px solid yellow;
+  padding: 10px 20px;
+  background-color: black;
+  color: yellow;
+  border-radius: 15px;
 }
 
 .hit {
-  background-color: red;
+  background-color: rgba(250, 00, 00, 0.7);
 }
+
 .skip {
-  background-color: green;
+  background-color: rgba(00, 00, 240, 0.6);
 }
-.check {
-  background-color: black;
+.stand {
+  background-color: rgba(0, 0, 0, 0.8);
   color: white;
 }
 
@@ -57,18 +105,29 @@ button {
   width: 100px;
   margin: 0 auto;
   top: 0px;
+  font-family: "Roboto Condensed", sans-serif;
 }
 .player {
   position: absolute;
   width: 100px;
   top: 10px;
   left: 10px;
+  font-family: "Roboto Condensed", sans-serif;
+  background-color: tomato;
+  width: 4.6vh;
 }
 .balance {
   position: absolute;
   width: 100px;
   top: 10px;
   right: 10px;
+  color: black;
+  border: 3px solid tomato;
+  padding-right: none;
+  margin-right: 5vh;
+  padding-left: 0.5vh;
+  width: 6vh;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 .result {
@@ -80,4 +139,34 @@ button {
 .buttons {
   display: none;
   flex-direction: column;
+}
+
+span {
+  font-family: "Roboto Condensed", sans-serif;
+}
+
+input {
+  -webkit-writing-mode: horizontal-tb !important;
+  text-rendering: auto;
+  color: -internal-light-dark(black, white);
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: beige;
+  display: inline-block;
+  text-align: start;
+  appearance: textfield;
+  background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
+  -webkit-rtl-ordering: logical;
+  cursor: text;
+  margin: 0em;
+  font: 400 13.3333px Arial;
+  padding: 1px 2px;
+  border-width: 2px;
+  width: 8vh;
+  border-style: inset;
+  border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+  border-image: initial;
+  font-family: "Roboto Condensed", sans-serif;
 }
